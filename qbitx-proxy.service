@@ -1,0 +1,27 @@
+[Unit]
+Description=Q-BitX Public RPC Proxy
+After=network.target
+
+[Service]
+Type=simple
+User=qbitx
+Group=qbitx
+WorkingDirectory=/opt/qbitx-rpc-proxy
+ExecStart=/opt/qbitx-rpc-proxy/venv/bin/gunicorn \
+    --bind 0.0.0.0:8080 \
+    --workers 4 \
+    --timeout 300 \
+    --access-logfile /var/log/qbitx-proxy/access.log \
+    --error-logfile /var/log/qbitx-proxy/error.log \
+    server:app
+EnvironmentFile=/opt/qbitx-rpc-proxy/.env
+Restart=always
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/log/qbitx-proxy
+
+[Install]
+WantedBy=multi-user.target
