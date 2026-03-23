@@ -4,8 +4,6 @@ __pycache__
 .env
 setup.sh
 qbitx-proxy.service
-nginx.conf.template
-nginx-entrypoint.sh
 docker-compose.yml
 LICENSE
 *.md

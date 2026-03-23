@@ -3,44 +3,12 @@ services:
     build: .
     container_name: qbitx-rpc-proxy
     restart: unless-stopped
-    expose:
-      - "8080"
+    ports:
+      - "${PROXY_PORT:-8080}:8080"
     environment:
-      - QBITX_NODE_HOST=host.docker.internal
-      - QBITX_NODE_PORT=8332
+      - QBITX_NODE_HOST=${QBITX_NODE_HOST:-host.docker.internal}
+      - QBITX_NODE_PORT=${QBITX_NODE_PORT:-8332}
       - QBITX_NODE_USER=${QBITX_NODE_USER:-qbitx}
       - QBITX_NODE_PASS=${QBITX_NODE_PASS:?Set QBITX_NODE_PASS in .env}
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-  nginx:
-    image: nginx:alpine
-    container_name: qbitx-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      - DOMAIN=${DOMAIN:?Set DOMAIN in .env (e.g. qbitx.solopool.site)}
-    volumes:
-      - ./nginx.conf.template:/etc/nginx/nginx.conf.template:ro
-      - ./nginx-entrypoint.sh:/entrypoint.sh:ro
-      - certbot-conf:/etc/letsencrypt:ro
-      - certbot-www:/var/www/certbot:ro
-    entrypoint: ["/bin/sh", "/entrypoint.sh"]
-    depends_on:
-      - qbitx-proxy
-
-  certbot:
-    image: certbot/certbot
-    container_name: qbitx-certbot
-    volumes:
-      - certbot-conf:/etc/letsencrypt
-      - certbot-www:/var/www/certbot
-    # Initial: docker compose run certbot certonly --webroot -w /var/www/certbot -d $DOMAIN
-    # Renew:   docker compose run certbot renew
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h; certbot renew; done'"
-
-volumes:
-  certbot-conf:
-  certbot-www:
