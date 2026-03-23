@@ -14,7 +14,7 @@ http {
     # --- HTTP: Redirect to HTTPS + ACME challenge ---
     server {
         listen 80;
-        server_name rpc.qbitx.org;
+        server_name ${DOMAIN};
 
         # Let's Encrypt challenge
         location /.well-known/acme-challenge/ {
@@ -30,11 +30,11 @@ http {
     # --- HTTPS: Proxy to Q-BitX RPC ---
     server {
         listen 443 ssl;
-        server_name rpc.qbitx.org;
+        server_name ${DOMAIN};
 
         # SSL certs (Let's Encrypt)
-        ssl_certificate     /etc/letsencrypt/live/rpc.qbitx.org/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/rpc.qbitx.org/privkey.pem;
+        ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
 
         # Modern TLS only
         ssl_protocols TLSv1.2 TLSv1.3;
