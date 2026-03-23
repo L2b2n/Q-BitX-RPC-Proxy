@@ -54,8 +54,16 @@ METHOD_LIMITS = {
     # UTXO queries (balance check without wallet)
     "scantxoutset":          10,
 
+    # TX history (address-based lookups for wallet recovery)
+    "searchrawtransactions": 10,
+    "getaddresstxids":       15,
+
     # Fee estimation
     "estimatesmartfee":      15,
+
+    # Address & network info
+    "validateaddress":       20,
+    "getnetworkinfo":        10,
 
     # Transaction building (stateless — no keys stored)
     "createrawtransaction":  20,

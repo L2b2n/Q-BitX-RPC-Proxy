@@ -1,0 +1,8 @@
+__pycache__
+*.pyc
+.git
+.env
+setup.sh
+qbitx-proxy.service
+LICENSE
+*.md
